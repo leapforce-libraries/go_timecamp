@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"time"
+
+	"cloud.google.com/go/civil"
 )
 
 type Entry struct {
@@ -24,9 +26,9 @@ type Entry struct {
 	Color            string `json:"color"`
 	Description      string `json:"description"`
 	LastModify2      *time.Time
-	Date2            *time.Time
-	StartTime2       *time.Time
-	EndTime2         *time.Time
+	Date2            *civil.Date
+	StartTime2       *civil.Time
+	EndTime2         *civil.Time
 	Locked2          *bool
 	Billable2        *bool
 }
@@ -76,7 +78,7 @@ func (e Entry) ParseDates() Entry {
 		if err != nil {
 			log.Println(err)
 		}
-		e.Date2 = &_e
+		e.Date2 = &civil.Date{_e.Year(), _e.Month(), _e.Day()}
 	}
 	// parse StartTime to time.Time
 	if e.Date != "" && e.StartTime != "" {
@@ -84,7 +86,8 @@ func (e Entry) ParseDates() Entry {
 		if err != nil {
 			log.Println(err)
 		}
-		e.StartTime2 = &_e
+		e.StartTime2 = &civil.Time{_e.Hour(), _e.Minute(), _e.Second(), 0}
+
 	}
 	// parse EndTime to time.Time
 	if e.Date != "" && e.EndTime != "" {
@@ -92,7 +95,7 @@ func (e Entry) ParseDates() Entry {
 		if err != nil {
 			log.Println(err)
 		}
-		e.EndTime2 = &_e
+		e.EndTime2 = &civil.Time{_e.Hour(), _e.Minute(), _e.Second(), 0}
 	}
 
 	return e
