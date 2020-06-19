@@ -1,4 +1,4 @@
-module github.com/leapforce-nl/go_timecamp
+module github.com/Leapforce-nl/go_timecamp
 
 go 1.13
 
