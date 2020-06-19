@@ -24,6 +24,7 @@ type Entry struct {
 	Color            string `json:"color"`
 	Description      string `json:"description"`
 	LastModify2      *time.Time
+	Date2            *time.Time
 	StartTime2       *time.Time
 	EndTime2         *time.Time
 	Locked2          *bool
@@ -61,13 +62,21 @@ func (t *Timecamp) GetEntriesByUserID(userID string) ([]Entry, error) {
 // ParseDates //
 //
 func (e Entry) ParseDates() Entry {
-	// parse LastModify to *bool
+	// parse LastModify to time.Time
 	if e.LastModify != "" {
 		_e, err := time.Parse("2006-01-02 15:04:05", e.LastModify)
 		if err != nil {
 			log.Println(err)
 		}
 		e.LastModify2 = &_e
+	}
+	// parse LastModify to time.Time
+	if e.Date != "" {
+		_e, err := time.Parse("2006-01-02", e.Date)
+		if err != nil {
+			log.Println(err)
+		}
+		e.Date2 = &_e
 	}
 	// parse StartTime to time.Time
 	if e.Date != "" && e.StartTime != "" {
