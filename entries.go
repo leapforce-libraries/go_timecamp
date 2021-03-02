@@ -6,10 +6,12 @@ import (
 	"time"
 
 	"cloud.google.com/go/civil"
+	errortools "github.com/leapforce-libraries/go_errortools"
+	go_http "github.com/leapforce-libraries/go_http"
 )
 
 type Entry struct {
-	ID               string `json:"id"`
+	ID               int    `json:"id"`
 	Duration         string `json:"duration"`
 	UserID           string `json:"user_id"`
 	UserName         string `json:"user_name"`
@@ -35,30 +37,30 @@ type Entry struct {
 
 // GetEntriesByUserID returns all entries
 //
-func (t *Timecamp) GetEntriesByUserID(userID string) ([]Entry, error) {
-	if t == nil {
-		return []Entry{}, nil
+func (service *Service) GetEntriesByUserID(userID string) (*[]Entry, *errortools.Error) {
+	if service == nil {
+		return nil, nil
 	}
 
-	urlStr := "%sentries/format/json/api_token/%s/user_ids/%s/from/%s/to/%s"
-
-	startDateString := t.startDateEntries.Format("2006-01-02")
+	startDateString := service.startDateEntries.Format("2006-01-02")
 	endDateString := time.Now().Format("2006-01-02")
-	url := fmt.Sprintf(urlStr, t.apiURL, t.token, userID, startDateString, endDateString)
-	//fmt.Printf(url)
 
 	entries := []Entry{}
 
-	err := t.Get(url, &entries)
-	if err != nil {
-		return nil, err
+	requestConfig := go_http.RequestConfig{
+		URL:           service.url(fmt.Sprintf("entries/format/json/api_token/%s/user_ids/%s/from/%s/to/%s", service.token, userID, startDateString, endDateString)),
+		ResponseModel: &entries,
+	}
+	_, _, e := service.get(&requestConfig)
+	if e != nil {
+		return nil, e
 	}
 
 	for index := range entries {
 		entries[index] = entries[index].ParseDates().ParseBooleans()
 	}
 
-	return entries, nil
+	return &entries, nil
 }
 
 // ParseDates //

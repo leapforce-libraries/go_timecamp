@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"log"
 	"time"
+
+	errortools "github.com/leapforce-libraries/go_errortools"
+	go_http "github.com/leapforce-libraries/go_http"
 )
 
 type Task struct {
@@ -43,111 +46,109 @@ type Task struct {
 
 // GetTasks returns all tasks
 //
-func (t *Timecamp) GetTasks() (map[string]Task, error) {
-
-	urlStr := "%stasks/format/json/api_token/%s"
-
-	url := fmt.Sprintf(urlStr, t.apiURL, t.token)
-	//fmt.Printf(url)
-
+func (service *Service) GetTasks() (*map[string]Task, *errortools.Error) {
 	tasks := make(map[string]Task)
 
-	err := t.Get(url, &tasks)
-	if err != nil {
-		return nil, err
+	requestConfig := go_http.RequestConfig{
+		URL:           service.url(fmt.Sprintf("tasks/format/json/api_token/%s", service.token)),
+		ResponseModel: &tasks,
+	}
+	_, _, e := service.get(&requestConfig)
+	if e != nil {
+		return nil, e
 	}
 
 	for index := range tasks {
 		tasks[index] = tasks[index].ParseDates().ParseBooleans()
 	}
 
-	return tasks, nil
+	return &tasks, nil
 }
 
 // ParseDates //
 //
-func (t Task) ParseDates() Task {
+func (service Task) ParseDates() Task {
 	// parse AddDate to *bool
-	if t.AddDate != "" {
-		_t, err := time.Parse("2006-01-02 15:04:05", t.AddDate)
+	if service.AddDate != "" {
+		_t, err := time.Parse("2006-01-02 15:04:05", service.AddDate)
 		if err != nil {
 			log.Println(err)
 		}
-		t.AddDate2 = &_t
+		service.AddDate2 = &_t
 	}
 	// parse CheckedDate to time.Time
-	if t.CheckedDate != "" {
-		_t, err := time.Parse("2006-01-02 15:04:05", t.CheckedDate)
+	if service.CheckedDate != "" {
+		_t, err := time.Parse("2006-01-02 15:04:05", service.CheckedDate)
 		if err != nil {
 			log.Println(err)
 		}
-		t.CheckedDate2 = &_t
+		service.CheckedDate2 = &_t
 	}
 	// parse DueDate to time.Time
-	if t.DueDate != "" {
-		_t, err := time.Parse("2006-01-02 15:04:05", t.DueDate)
+	if service.DueDate != "" {
+		_t, err := time.Parse("2006-01-02 15:04:05", service.DueDate)
 		if err != nil {
 			log.Println(err)
 		}
-		t.DueDate2 = &_t
+		service.DueDate2 = &_t
 	}
 	// parse ModifyTime to time.Time
-	if t.ModifyTime != "" {
-		_t, err := time.Parse("2006-01-02 15:04:05", t.ModifyTime)
+	if service.ModifyTime != "" {
+		_t, err := time.Parse("2006-01-02 15:04:05", service.ModifyTime)
 		if err != nil {
 			log.Println(err)
 		}
-		t.ModifyTime2 = &_t
+		service.ModifyTime2 = &_t
 	}
 
-	return t
+	return service
 }
 
 // ParseBooleans //
 //
-func (t Task) ParseBooleans() Task {
+func (service Task) ParseBooleans() Task {
 	// parse Archived to *bool
-	switch t.Archived {
+	switch service.Archived {
 	case "0":
 		b := false
-		t.Archived2 = &b
+		service.Archived2 = &b
 		break
 	case "1":
 		b := true
-		t.Archived2 = &b
+		service.Archived2 = &b
 		break
 	default:
-		t.Archived2 = nil
+		service.Archived2 = nil
 		break
 	}
 	// parse Budgeted to *bool
-	switch t.Budgeted {
+	switch service.Budgeted {
 	case "0":
 		b := false
-		t.Budgeted2 = &b
+		service.Budgeted2 = &b
 		break
 	case "1":
 		b := true
-		t.Budgeted2 = &b
+		service.Budgeted2 = &b
 		break
 	default:
-		t.Budgeted2 = nil
+		service.Budgeted2 = nil
 		break
 	}
 	// parse Billable to *bool
-	switch t.Billable {
+	switch service.Billable {
 	case "0":
 		b := false
-		t.Billable2 = &b
+		service.Billable2 = &b
 		break
 	case "1":
 		b := true
-		t.Billable2 = &b
+		service.Billable2 = &b
 		break
 	default:
-		t.Billable2 = nil
+		service.Billable2 = nil
 		break
 	}
 
-	return t
+	return service
 }
