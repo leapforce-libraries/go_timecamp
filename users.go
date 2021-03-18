@@ -1,24 +1,20 @@
 package timecamp
 
 import (
-	"fmt"
-	"log"
-	"time"
-
 	errortools "github.com/leapforce-libraries/go_errortools"
 	go_http "github.com/leapforce-libraries/go_http"
+	t_types "github.com/leapforce-libraries/go_timecamp/types"
+	go_types "github.com/leapforce-libraries/go_types"
 )
 
 type User struct {
-	GroupID     string `json:"group_id"`
-	UserID      string `json:"user_id"`
-	Email       string `json:"email"`
-	LoginCount  string `json:"login_count"`
-	LoginTime   string `json:"login_time"`
-	DisplayName string `json:"display_name"`
-	SynchTime   string `json:"synch_time"`
-	LoginTime2  *time.Time
-	SynchTime2  *time.Time
+	GroupID     go_types.Int64String   `json:"group_id"`
+	UserID      go_types.Int64String   `json:"user_id"`
+	Email       string                 `json:"email"`
+	LoginCount  go_types.Int64String   `json:"login_count"`
+	LoginTime   t_types.DateTimeString `json:"login_time"`
+	DisplayName string                 `json:"display_name"`
+	SynchTime   t_types.DateTimeString `json:"synch_time"`
 }
 
 // GetUsers returns all users
@@ -27,7 +23,7 @@ func (service *Service) GetUsers() (*[]User, *errortools.Error) {
 	users := []User{}
 
 	requestConfig := go_http.RequestConfig{
-		URL:           service.url(fmt.Sprintf("users/format/json/api_token/%s", service.token)),
+		URL:           service.url("users"),
 		ResponseModel: &users,
 	}
 	_, _, e := service.get(&requestConfig)
@@ -35,32 +31,5 @@ func (service *Service) GetUsers() (*[]User, *errortools.Error) {
 		return nil, e
 	}
 
-	for index := range users {
-		users[index] = users[index].ParseDates()
-	}
-
 	return &users, nil
-}
-
-// ParseDates //
-//
-func (service User) ParseDates() User {
-	// parse LoginTime to *bool
-	if service.LoginTime != "" {
-		_t, err := time.Parse("2006-01-02 15:04:05", service.LoginTime)
-		if err != nil {
-			log.Println(err)
-		}
-		service.LoginTime2 = &_t
-	}
-	// parse SynchTime to time.Time
-	if service.SynchTime != "" {
-		_t, err := time.Parse("2006-01-02 15:04:05", service.SynchTime)
-		if err != nil {
-			log.Println(err)
-		}
-		service.SynchTime2 = &_t
-	}
-
-	return service
 }

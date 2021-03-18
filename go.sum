@@ -199,6 +199,8 @@ github.com/leapforce-libraries/go_errortools v0.0.0-20210301162243-e67a4b930ce5 
 github.com/leapforce-libraries/go_errortools v0.0.0-20210301162243-e67a4b930ce5/go.mod h1:qw2+jRSmAUBmnLgN9kgiadj31C2j7j4f9jSxuydSBHg=
 github.com/leapforce-libraries/go_http v0.0.0-20210302111553-cbf6da397516 h1:YD66cY8JzUuXY/mIaw/qcO6ytftT3gPMhP9K6BgStq4=
 github.com/leapforce-libraries/go_http v0.0.0-20210302111553-cbf6da397516/go.mod h1:Riomqgmu50GN2/f8O0i1Skaa/gp4qYD/6LqKBIcZR0o=
+github.com/leapforce-libraries/go_types v0.0.0-20210317121000-b3a15d891f1c h1:aGF+WjjX4Rmhd8Ftq511JhszxCD42AIGYZsf4bCqHq4=
+github.com/leapforce-libraries/go_types v0.0.0-20210317121000-b3a15d891f1c/go.mod h1:dM2wpUVXfTFAuEBZG+878JIQtr/QraSb0mpGkLYt1Qw=
 github.com/leapforce-libraries/go_utilities v0.0.0-20210218124037-13855c484ece h1:UiBAflWDM7tkOUKjT8EEtZlSHbdy+/z/dQ1BmatMJjk=
 github.com/leapforce-libraries/go_utilities v0.0.0-20210218124037-13855c484ece/go.mod h1:i+C6R2dATK2RsD5+XDV9VqkKSB64SDA+zSLhCKsAyVI=
 github.com/magiconair/properties v1.8.0/go.mod h1:PppfXfuXeibc/6YijjN8zIbojt8czPbwD3XqdrwzmxQ=

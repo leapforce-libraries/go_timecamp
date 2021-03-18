@@ -10,10 +10,10 @@ import (
 )
 
 const (
-	APIURL         string = "https://www.timecamp.com/third_party/api"
-	DateTimeFormat string = "2006-01-02 15:04:05"
+	APIURL string = "https://app.timecamp.com/third_party/api"
+	/*DateTimeFormat string = "2006-01-02 15:04:05"
 	DateFormat     string = "2006-01-02"
-	TimeFormat     string = "15:04:05"
+	TimeFormat     string = "15:04:05"*/
 )
 
 // type
@@ -44,6 +44,12 @@ func NewService(config ServiceConfig) (*Service, *errortools.Error) {
 }
 
 func (service *Service) httpRequest(httpMethod string, requestConfig *go_http.RequestConfig) (*http.Request, *http.Response, *errortools.Error) {
+	// add authentication header
+	header := http.Header{}
+	header.Set("Authorization", fmt.Sprintf("Bearer %s", service.token))
+	header.Set("Accept", "application/json")
+	(*requestConfig).NonDefaultHeaders = &header
+
 	// add error model
 	errorResponse := ErrorResponse{}
 	(*requestConfig).ErrorModel = &errorResponse
