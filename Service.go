@@ -34,12 +34,15 @@ func NewService(config ServiceConfig) (*Service, *errortools.Error) {
 		return nil, errortools.ErrorMessage("Token not provided")
 	}
 
-	httpServiceConfig := go_http.ServiceConfig{}
+	httpService, e := go_http.NewService(&go_http.ServiceConfig{})
+	if e != nil {
+		return nil, e
+	}
 
 	return &Service{
 		token:            config.Token,
 		startDateEntries: config.StartDateEntries,
-		httpService:      go_http.NewService(httpServiceConfig),
+		httpService:      httpService,
 	}, nil
 }
 
