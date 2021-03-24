@@ -21,10 +21,10 @@ type Entry struct {
 	Date             t_types.DateString     `json:"date"`
 	StartTime        t_types.TimeString     `json:"start_time"`
 	EndTime          t_types.TimeString     `json:"end_time"`
-	Locked           t_types.BoolString     `json:"locked"`
+	Locked           go_types.BoolString    `json:"locked"`
 	Name             string                 `json:"name"`
 	AddOnsExternalID string                 `json:"addons_external_id"`
-	Billable         t_types.BoolInt        `json:"billable"`
+	Billable         go_types.BoolInt       `json:"billable"`
 	InvoiceID        go_types.Int64String   `json:"invoiceId"`
 	Color            string                 `json:"color"`
 	Description      string                 `json:"description"`
