@@ -10,10 +10,8 @@ import (
 )
 
 const (
-	APIURL string = "https://app.timecamp.com/third_party/api"
-	/*DateTimeFormat string = "2006-01-02 15:04:05"
-	DateFormat     string = "2006-01-02"
-	TimeFormat     string = "15:04:05"*/
+	apiName string = "TimeCamp"
+	apiURL  string = "https://app.timecamp.com/third_party/api"
 )
 
 // type
@@ -66,7 +64,7 @@ func (service *Service) httpRequest(httpMethod string, requestConfig *go_http.Re
 }
 
 func (service *Service) url(path string) string {
-	return fmt.Sprintf("%s/%s", APIURL, path)
+	return fmt.Sprintf("%s/%s", apiURL, path)
 }
 
 func (service *Service) get(requestConfig *go_http.RequestConfig) (*http.Request, *http.Response, *errortools.Error) {
@@ -83,4 +81,20 @@ func (service *Service) put(requestConfig *go_http.RequestConfig) (*http.Request
 
 func (service *Service) delete(requestConfig *go_http.RequestConfig) (*http.Request, *http.Response, *errortools.Error) {
 	return service.httpRequest(http.MethodDelete, requestConfig)
+}
+
+func (service *Service) APIName() string {
+	return apiName
+}
+
+func (service *Service) APIKey() string {
+	return service.token
+}
+
+func (service *Service) APICallCount() int64 {
+	return service.httpService.RequestCount()
+}
+
+func (service *Service) APIReset() {
+	service.httpService.ResetRequestCount()
 }
