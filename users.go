@@ -28,7 +28,7 @@ func (service *Service) GetUsers() (*[]User, *errortools.Error) {
 		Url:           service.url("users"),
 		ResponseModel: &users,
 	}
-	_, _, e := service.httpService.HttpRequest(&requestConfig)
+	_, _, e := service.httpRequest(&requestConfig)
 	if e != nil {
 		return nil, e
 	}

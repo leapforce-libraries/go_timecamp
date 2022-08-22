@@ -50,7 +50,7 @@ func (service *Service) GetEntriesByUserID(userID int64) (*[]Entry, *errortools.
 		Url:           service.url(fmt.Sprintf("entries?%s", values.Encode())),
 		ResponseModel: &entries,
 	}
-	_, _, e := service.httpService.HttpRequest(&requestConfig)
+	_, _, e := service.httpRequest(&requestConfig)
 	if e != nil {
 		return nil, e
 	}

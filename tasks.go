@@ -100,7 +100,7 @@ func (service *Service) GetTasks(config *GetTasksConfig) (*map[string]Task, *err
 		Url:           service.url(fmt.Sprintf("tasks?%s", params.Encode())),
 		ResponseModel: &tasks,
 	}
-	_, _, e := service.httpService.HttpRequest(&requestConfig)
+	_, _, e := service.httpRequest(&requestConfig)
 	if e != nil {
 		return nil, e
 	}
