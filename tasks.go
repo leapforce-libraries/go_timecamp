@@ -2,6 +2,7 @@ package timecamp
 
 import (
 	"fmt"
+	"net/http"
 	"net/url"
 	"strings"
 
@@ -95,10 +96,11 @@ func (service *Service) GetTasks(config *GetTasksConfig) (*map[string]Task, *err
 	tasks := make(map[string]Task)
 
 	requestConfig := go_http.RequestConfig{
-		URL:           service.url(fmt.Sprintf("tasks?%s", params.Encode())),
+		Method:        http.MethodGet,
+		Url:           service.url(fmt.Sprintf("tasks?%s", params.Encode())),
 		ResponseModel: &tasks,
 	}
-	_, _, e := service.get(&requestConfig)
+	_, _, e := service.httpService.HttpRequest(&requestConfig)
 	if e != nil {
 		return nil, e
 	}

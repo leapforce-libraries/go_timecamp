@@ -2,6 +2,7 @@ package timecamp
 
 import (
 	"fmt"
+	"net/http"
 	"net/url"
 	"time"
 
@@ -45,10 +46,11 @@ func (service *Service) GetEntriesByUserID(userID int64) (*[]Entry, *errortools.
 	entries := []Entry{}
 
 	requestConfig := go_http.RequestConfig{
-		URL:           service.url(fmt.Sprintf("entries?%s", values.Encode())),
+		Method:        http.MethodGet,
+		Url:           service.url(fmt.Sprintf("entries?%s", values.Encode())),
 		ResponseModel: &entries,
 	}
-	_, _, e := service.get(&requestConfig)
+	_, _, e := service.httpService.HttpRequest(&requestConfig)
 	if e != nil {
 		return nil, e
 	}

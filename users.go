@@ -5,6 +5,7 @@ import (
 	go_http "github.com/leapforce-libraries/go_http"
 	t_types "github.com/leapforce-libraries/go_timecamp/types"
 	go_types "github.com/leapforce-libraries/go_types"
+	"net/http"
 )
 
 type User struct {
@@ -23,10 +24,11 @@ func (service *Service) GetUsers() (*[]User, *errortools.Error) {
 	users := []User{}
 
 	requestConfig := go_http.RequestConfig{
-		URL:           service.url("users"),
+		Method:        http.MethodGet,
+		Url:           service.url("users"),
 		ResponseModel: &users,
 	}
-	_, _, e := service.get(&requestConfig)
+	_, _, e := service.httpService.HttpRequest(&requestConfig)
 	if e != nil {
 		return nil, e
 	}
